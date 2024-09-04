@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "pdfkit/version"
+require "my_pdfkit/version"
 
 Gem::Specification.new do |s|
-  s.name        = "pdfkit"
-  s.version     = PDFKit::VERSION
+  s.name        = "my_pdfkit"
+  s.version     = MyPDFKit::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Jared Pace", "Relevance"]
   s.email       = ["jared@codewordstudios.com"]
@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.files         = `git ls-files`.split("\n")
+  p `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]

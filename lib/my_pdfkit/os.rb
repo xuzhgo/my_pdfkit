@@ -2,7 +2,7 @@
 
 require 'rbconfig'
 
-class PDFKit
+class MyPDFKit
   module OS
     def self.host_is_windows?
       !(RbConfig::CONFIG['host_os'] =~ /mswin|msys|mingw|cygwin|bccwin|wince/).nil?

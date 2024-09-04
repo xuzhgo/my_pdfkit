@@ -3,13 +3,13 @@
 require 'shellwords'
 require 'tempfile'
 
-class PDFKit
+class MyPDFKit
   class Error < StandardError; end
 
   class NoExecutableError < Error
     def initialize
-      msg = "No wkhtmltopdf executable found at #{PDFKit.configuration.wkhtmltopdf}\n" \
-            ">> Please install wkhtmltopdf - https://github.com/pdfkit/PDFKit/wiki/Installing-WKHTMLTOPDF"
+      msg = "No wkhtmltopdf executable found at #{MyPDFKit.configuration.wkhtmltopdf}\n" \
+            ">> Please install wkhtmltopdf - https://github.com/pdfkit/MyPDFKit/wiki/Installing-WKHTMLTOPDF"
       super(msg)
     end
   end
@@ -34,15 +34,15 @@ class PDFKit
 
     @stylesheets = []
 
-    options = PDFKit.configuration.default_options.merge(options)
-    options.delete(:quiet) if PDFKit.configuration.verbose?
+    options = MyPDFKit.configuration.default_options.merge(options)
+    options.delete(:quiet) if MyPDFKit.configuration.verbose?
     options.merge! find_options_in_meta(url_file_or_html) unless source.url?
     @root_url = options.delete(:root_url)
     @protocol = options.delete(:protocol)
     @renderer = WkHTMLtoPDF.new options
     @renderer.normalize_options
 
-    raise NoExecutableError unless File.exist?(PDFKit.configuration.wkhtmltopdf)
+    raise NoExecutableError unless File.exist?(MyPDFKit.configuration.wkhtmltopdf)
   end
 
   def command(path = nil)
@@ -59,7 +59,7 @@ class PDFKit
   end
 
   def executable
-    PDFKit.configuration.executable
+    MyPDFKit.configuration.executable
   end
 
   def to_pdf(path=nil)
@@ -93,8 +93,8 @@ class PDFKit
 
     found = {}
     content.scan(/<meta [^>]*>/) do |meta|
-      if meta.match(/name=["']#{PDFKit.configuration.meta_tag_prefix}/)
-        name = meta.scan(/name=["']#{PDFKit.configuration.meta_tag_prefix}([^"']*)/)[0][0].split
+      if meta.match(/name=["']#{MyPDFKit.configuration.meta_tag_prefix}/)
+        name = meta.scan(/name=["']#{MyPDFKit.configuration.meta_tag_prefix}([^"']*)/)[0][0].split
         found[name] = meta.scan(/content=["']([^"'\\]+)["']/)[0][0]
       end
     end
@@ -118,7 +118,7 @@ class PDFKit
 
   def preprocess_html
     if @source.html?
-      processed_html = PDFKit::HTMLPreprocessor.process(@source.to_s, @root_url, @protocol)
+      processed_html = MyPDFKit::HTMLPreprocessor.process(@source.to_s, @root_url, @protocol)
       @source = Source.new(processed_html)
     end
   end

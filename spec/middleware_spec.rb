@@ -12,12 +12,12 @@ def mock_app(options = {}, conditions = {}, custom_headers = {})
   }
 
   builder = Rack::Builder.new
-  builder.use PDFKit::Middleware, options, conditions
+  builder.use MyPDFKit::Middleware, options, conditions
   builder.run main_app
   @app = builder.to_app
 end
 
-describe PDFKit::Middleware do
+describe MyPDFKit::Middleware do
   let(:headers) do
     {'content-type' => "text/html"}
   end
@@ -100,7 +100,7 @@ describe PDFKit::Middleware do
               specify do
                 get 'http://www.example.org/public/test.pdf'
                 expect(last_response.headers["content-type"]).to eq("application/pdf")
-                expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+                expect(last_response.body.bytesize).to eq(MyPDFKit.new("Hello world!").to_pdf.bytesize)
               end
             end
 
@@ -120,7 +120,7 @@ describe PDFKit::Middleware do
               specify do
                 get 'http://www.example.org/public/test.pdf'
                 expect(last_response.headers["content-type"]).to eq("application/pdf")
-                expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+                expect(last_response.body.bytesize).to eq(MyPDFKit.new("Hello world!").to_pdf.bytesize)
               end
             end
 
@@ -142,7 +142,7 @@ describe PDFKit::Middleware do
               specify do
                 get 'http://www.example.org/public/test.pdf'
                 expect(last_response.headers["content-type"]).to eq("application/pdf")
-                expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+                expect(last_response.body.bytesize).to eq(MyPDFKit.new("Hello world!").to_pdf.bytesize)
               end
             end
 
@@ -162,7 +162,7 @@ describe PDFKit::Middleware do
               specify do
                 get 'http://www.example.org/public/test.pdf'
                 expect(last_response.headers["content-type"]).to eq("application/pdf")
-                expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+                expect(last_response.body.bytesize).to eq(MyPDFKit.new("Hello world!").to_pdf.bytesize)
               end
             end
 
@@ -188,7 +188,7 @@ describe PDFKit::Middleware do
               specify do
                 get 'http://www.example.org/public/test.pdf'
                 expect(last_response.headers["content-type"]).to eq("application/pdf")
-                expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+                expect(last_response.body.bytesize).to eq(MyPDFKit.new("Hello world!").to_pdf.bytesize)
               end
             end
 
@@ -208,7 +208,7 @@ describe PDFKit::Middleware do
               specify do
                 get 'http://www.example.org/public/test.pdf'
                 expect(last_response.headers["content-type"]).to eq("application/pdf")
-                expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+                expect(last_response.body.bytesize).to eq(MyPDFKit.new("Hello world!").to_pdf.bytesize)
               end
             end
 
@@ -230,7 +230,7 @@ describe PDFKit::Middleware do
               specify do
                 get 'http://www.example.org/public/test.pdf'
                 expect(last_response.headers["content-type"]).to eq("application/pdf")
-                expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+                expect(last_response.body.bytesize).to eq(MyPDFKit.new("Hello world!").to_pdf.bytesize)
               end
             end
 
@@ -250,7 +250,7 @@ describe PDFKit::Middleware do
               specify do
                 get 'http://www.example.org/public/test.pdf'
                 expect(last_response.headers["content-type"]).to eq("application/pdf")
-                expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+                expect(last_response.body.bytesize).to eq(MyPDFKit.new("Hello world!").to_pdf.bytesize)
               end
             end
 
@@ -273,16 +273,16 @@ describe PDFKit::Middleware do
           expect(File.exist?('spec/test_save.pdf')).to eq(false)
         end
 
-        context "when header PDFKit-save-pdf is present" do
+        context "when header MyPDFKit-save-pdf is present" do
           it "saves the .pdf to disk" do
-            headers = { 'PDFKit-save-pdf' => 'spec/test_save.pdf' }
+            headers = { 'MyPDFKit-save-pdf' => 'spec/test_save.pdf' }
             mock_app({}, {only: '/public'}, headers)
             get 'http://www.example.org/public/test_save.pdf'
             expect(File.exist?('spec/test_save.pdf')).to eq(true)
           end
 
           it "does not raise when target directory does not exist" do
-            headers = { 'PDFKit-save-pdf' => '/this/dir/does/not/exist/spec/test_save.pdf' }
+            headers = { 'MyPDFKit-save-pdf' => '/this/dir/does/not/exist/spec/test_save.pdf' }
             mock_app({}, {only: '/public'}, headers)
             expect {
               get 'http://www.example.com/public/test_save.pdf'
@@ -290,7 +290,7 @@ describe PDFKit::Middleware do
           end
         end
 
-        context "when header PDFKit-save-pdf is not present" do
+        context "when header MyPDFKit-save-pdf is not present" do
           it "does not saved the .pdf to disk" do
             mock_app({}, {only: '/public'}, {} )
             get 'http://www.example.org/public/test_save.pdf'
@@ -300,41 +300,41 @@ describe PDFKit::Middleware do
       end
 
       describe 'javascript delay' do
-        context 'when header PDFKit-javascript-delay is present' do
-          it 'passes header value through to PDFKit initialiser' do
-            expect(PDFKit).to receive(:new).with('Hello world!', {
+        context 'when header MyPDFKit-javascript-delay is present' do
+          it 'passes header value through to MyPDFKit initialiser' do
+            expect(MyPDFKit).to receive(:new).with('Hello world!', {
               root_url: 'http://www.example.com/', protocol: 'http', javascript_delay: 4321
             }).and_call_original
 
-            headers = { 'PDFKit-javascript-delay' => '4321' }
+            headers = { 'MyPDFKit-javascript-delay' => '4321' }
             mock_app({}, { only: '/public' }, headers)
             get 'http://www.example.com/public/test_save.pdf'
           end
 
           it 'handles invalid content in header' do
-            expect(PDFKit).to receive(:new).with('Hello world!', {
+            expect(MyPDFKit).to receive(:new).with('Hello world!', {
               root_url: 'http://www.example.com/', protocol: 'http', javascript_delay: 0
             }).and_call_original
 
-            headers = { 'PDFKit-javascript-delay' => 'invalid' }
+            headers = { 'MyPDFKit-javascript-delay' => 'invalid' }
             mock_app({}, { only: '/public' }, headers)
             get 'http://www.example.com/public/test_save.pdf'
           end
 
           it 'overrides default option' do
-            expect(PDFKit).to receive(:new).with('Hello world!', {
+            expect(MyPDFKit).to receive(:new).with('Hello world!', {
               root_url: 'http://www.example.com/', protocol: 'http', javascript_delay: 4321
             }).and_call_original
 
-            headers = { 'PDFKit-javascript-delay' => '4321' }
+            headers = { 'MyPDFKit-javascript-delay' => '4321' }
             mock_app({ javascript_delay: 1234 }, { only: '/public' }, headers)
             get 'http://www.example.com/public/test_save.pdf'
           end
         end
 
-        context 'when header PDFKit-javascript-delay is not present' do
+        context 'when header MyPDFKit-javascript-delay is not present' do
           it 'passes through default option' do
-            expect(PDFKit).to receive(:new).with('Hello world!', {
+            expect(MyPDFKit).to receive(:new).with('Hello world!', {
               root_url: 'http://www.example.com/', protocol: 'http', javascript_delay: 1234
             }).and_call_original
 
@@ -402,7 +402,7 @@ describe PDFKit::Middleware do
         context "errors raised by PDF generation" do
           specify do
             mock_app
-            allow(PDFKit).to receive(:new).and_raise(error)
+            allow(MyPDFKit).to receive(:new).and_raise(error)
             get 'http://www.example.org/public/test.pdf'
             expect(last_response.status).to eq(500)
             expect(last_response.body).to eq(error.message)
@@ -474,7 +474,7 @@ describe PDFKit::Middleware do
           }
 
           builder = Rack::Builder.new
-          builder.use PDFKit::Middleware
+          builder.use MyPDFKit::Middleware
           builder.run main_app
           @app = builder.to_app
         end
@@ -497,7 +497,7 @@ describe PDFKit::Middleware do
 
   describe "#root_url and #protocol" do
     before do
-      @pdf = PDFKit::Middleware.new({})
+      @pdf = MyPDFKit::Middleware.new({})
       @env = { 'REQUEST_URI' => 'http://example.com/document.pdf', 'rack.url_scheme' => 'http', 'HTTP_HOST' => 'example.com' }
     end
 
@@ -513,10 +513,10 @@ describe PDFKit::Middleware do
 
     context 'when root_url is configured' do
       before do
-        PDFKit.configuration.root_url = 'http://example.net/'
+        MyPDFKit.configuration.root_url = 'http://example.net/'
       end
       after do
-        PDFKit.configuration.root_url = nil
+        MyPDFKit.configuration.root_url = nil
       end
 
       it "takes the root_url from the configuration, and infers the protocol from the environment" do

@@ -1,4 +1,4 @@
-# PDFKit
+# MyPDFKit
 
 Create PDFs using plain old HTML+CSS. Uses [wkhtmltopdf](http://github.com/antialize/wkhtmltopdf) on the back-end which renders HTML using Webkit.
 
@@ -9,9 +9,9 @@ Create PDFs using plain old HTML+CSS. Uses [wkhtmltopdf](http://github.com/antia
 
 ## Install
 
-### PDFKit
+### MyPDFKit
 ```
-gem install pdfkit
+gem install my_pdfkit
 ```
 ### wkhtmltopdf
 
@@ -27,9 +27,9 @@ gem install wkhtmltopdf-binary
 
 ## Usage
 ```ruby
-# PDFKit.new takes the HTML and any options for wkhtmltopdf
+# MyPDFKit.new takes the HTML and any options for wkhtmltopdf
 # run `wkhtmltopdf --extended-help` for a full list of options
-kit = PDFKit.new(html, :page_size => 'Letter')
+kit = MyPDFKit.new(html, :page_size => 'Letter')
 kit.stylesheets << '/path/to/css/file'
 
 # Get an inline PDF
@@ -38,15 +38,15 @@ pdf = kit.to_pdf
 # Save the PDF to a file
 file = kit.to_file('/path/to/save/pdf')
 
-# PDFKit.new can optionally accept a URL or a File.
+# MyPDFKit.new can optionally accept a URL or a File.
 # Stylesheets can not be added when source is provided as a URL or File.
-kit = PDFKit.new('http://google.com')
-kit = PDFKit.new(File.new('/path/to/html'))
+kit = MyPDFKit.new('http://google.com')
+kit = MyPDFKit.new(File.new('/path/to/html'))
 
 # Add any kind of option through meta tags
-PDFKit.new('<html><head><meta name="pdfkit-page_size" content="Letter"')
-PDFKit.new('<html><head><meta name="pdfkit-cookie cookie_name1" content="cookie_value1"')
-PDFKit.new('<html><head><meta name="pdfkit-cookie cookie_name2" content="cookie_value2"')
+MyPDFKit.new('<html><head><meta name="pdfkit-page_size" content="Letter"')
+MyPDFKit.new('<html><head><meta name="pdfkit-cookie cookie_name1" content="cookie_value1"')
+MyPDFKit.new('<html><head><meta name="pdfkit-cookie cookie_name2" content="cookie_value2"')
 ```
 
 ### Resolving relative URLs and protocols
@@ -54,26 +54,26 @@ PDFKit.new('<html><head><meta name="pdfkit-cookie cookie_name2" content="cookie_
 If the source HTML has relative URLs (`/images/cat.png`) or
 [protocols](https://en.wikipedia.org/wiki/Uniform_Resource_Locator#prurl)
 (`//example.com/site.css`) that need to be resolved, you can pass `:root_url`
-and `:protocol` options to PDFKit:
+and `:protocol` options to MyPDFKit:
 
 ```ruby
-PDFKit.new(html, root_url: 'http://mysite.com/').to_file
+MyPDFKit.new(html, root_url: 'http://mysite.com/').to_file
 # or:
-PDFKit.new(html, protocol: 'https').to_file
+MyPDFKit.new(html, protocol: 'https').to_file
 ```
 
 ### Using cookies in scraping
 If you want to pass a cookie to pdfkit to scrape a website, you can
 pass it in a hash:
 ```ruby
-kit = PDFKit.new(url, cookie: {cookie_name: :cookie_value})
-kit = PDFKit.new(url, [:cookie, :cookie_name1] => :cookie_val1, [:cookie, :cookie_name2] => :cookie_val2)
+kit = MyPDFKit.new(url, cookie: {cookie_name: :cookie_value})
+kit = MyPDFKit.new(url, [:cookie, :cookie_name1] => :cookie_val1, [:cookie, :cookie_name2] => :cookie_val2)
 ```
 ## Configuration
-If you're on Windows or you would like to use a specific wkhtmltopdf you installed, you will need to tell PDFKit where the binary is. PDFKit will try to intelligently guess at the location of wkhtmltopdf by running the command `which wkhtmltopdf`. If you are on Windows, want to point PDFKit to a different binary, or are having trouble with getting PDFKit to find your binary, please manually configure the wkhtmltopdf location. You can configure PDFKit like so:
+If you're on Windows or you would like to use a specific wkhtmltopdf you installed, you will need to tell MyPDFKit where the binary is. MyPDFKit will try to intelligently guess at the location of wkhtmltopdf by running the command `which wkhtmltopdf`. If you are on Windows, want to point MyPDFKit to a different binary, or are having trouble with getting MyPDFKit to find your binary, please manually configure the wkhtmltopdf location. You can configure MyPDFKit like so:
 ```ruby
 # config/initializers/pdfkit.rb
-PDFKit.configure do |config|
+MyPDFKit.configure do |config|
   config.wkhtmltopdf = '/path/to/wkhtmltopdf'
   config.default_options = {
     :page_size => 'Legal',
@@ -85,59 +85,59 @@ PDFKit.configure do |config|
 end
 ```
 ## Middleware
-PDFKit comes with a middleware that allows users to get a PDF view of any page on your site by appending .pdf to the URL.
+MyPDFKit comes with a middleware that allows users to get a PDF view of any page on your site by appending .pdf to the URL.
 
 ### Middleware Setup
 **Non-Rails Rack apps**
 ```ruby
 # in config.ru
-require 'pdfkit'
-use PDFKit::Middleware
+require 'my_pdfkit'
+use MyPDFKit::Middleware
 ```
 **Rails apps**
 ```ruby
 # in application.rb(Rails3) or environment.rb(Rails2)
 require 'pdfkit'
-config.middleware.use PDFKit::Middleware
+config.middleware.use MyPDFKit::Middleware
 ```
-**With PDFKit options**
+**With MyPDFKit options**
 ```ruby
-# options will be passed to PDFKit.new
-config.middleware.use PDFKit::Middleware, :print_media_type => true
+# options will be passed to MyPDFKit.new
+config.middleware.use MyPDFKit::Middleware, :print_media_type => true
 ```
 **With conditions to limit routes that can be generated in pdf**
 ```ruby
 # conditions can be regexps (either one or an array)
-config.middleware.use PDFKit::Middleware, {}, :only => %r[^/public]
-config.middleware.use PDFKit::Middleware, {}, :only => [%r[^/invoice], %r[^/public]]
+config.middleware.use MyPDFKit::Middleware, {}, :only => %r[^/public]
+config.middleware.use MyPDFKit::Middleware, {}, :only => [%r[^/invoice], %r[^/public]]
 
 # conditions can be strings (either one or an array)
-config.middleware.use PDFKit::Middleware, {}, :only => '/public'
-config.middleware.use PDFKit::Middleware, {}, :only => ['/invoice', '/public']
+config.middleware.use MyPDFKit::Middleware, {}, :only => '/public'
+config.middleware.use MyPDFKit::Middleware, {}, :only => ['/invoice', '/public']
 
 # conditions can be regexps (either one or an array)
-config.middleware.use PDFKit::Middleware, {}, :except => [%r[^/prawn], %r[^/secret]]
+config.middleware.use MyPDFKit::Middleware, {}, :except => [%r[^/prawn], %r[^/secret]]
 
 # conditions can be strings (either one or an array)
-config.middleware.use PDFKit::Middleware, {}, :except => ['/secret']
+config.middleware.use MyPDFKit::Middleware, {}, :except => ['/secret']
 ```
 **With conditions to force download**
 ```ruby
 # force download with attachment disposition
-config.middleware.use PDFKit::Middleware, {}, :disposition => 'attachment'
+config.middleware.use MyPDFKit::Middleware, {}, :disposition => 'attachment'
 # conditions can force a filename
-config.middleware.use PDFKit::Middleware, {}, :disposition => 'attachment; filename=report.pdf'
+config.middleware.use MyPDFKit::Middleware, {}, :disposition => 'attachment; filename=report.pdf'
 ```
 **Saving the generated .pdf to disk**
 
-Setting the `PDFKit-save-pdf` header will cause PDFKit to write the generated .pdf to the file indicated by the value of the header.
+Setting the `MyPDFKit-save-pdf` header will cause MyPDFKit to write the generated .pdf to the file indicated by the value of the header.
 
 For example:
 ```ruby
-headers['PDFKit-save-pdf'] = 'path/to/saved.pdf'
+headers['MyPDFKit-save-pdf'] = 'path/to/saved.pdf'
 ```
 
-Will cause the .pdf to be saved to `path/to/saved.pdf` in addition to being sent back to the client.  If the path is not writable/non-existent the write will fail silently.  The `PDFKit-save-pdf` header is never sent back to the client.
+Will cause the .pdf to be saved to `path/to/saved.pdf` in addition to being sent back to the client.  If the path is not writable/non-existent the write will fail silently.  The `MyPDFKit-save-pdf` header is never sent back to the client.
 
 ## Troubleshooting
 
@@ -165,7 +165,7 @@ Will cause the .pdf to be saved to `path/to/saved.pdf` in addition to being sent
    does not seem to be downloading correctly in the PDF. This is due
    to the fact that wkhtmltopdf does not know where to find those files.
    Make sure you are using absolute paths (start with forward slash) to
-   your resources. If you are using PDFKit to generate PDFs from a raw
+   your resources. If you are using MyPDFKit to generate PDFs from a raw
    HTML source make sure you use complete paths (either file paths or
    urls including the domain). In restrictive server environments the
    root_url configuration may be what you are looking for change your

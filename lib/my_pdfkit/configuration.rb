@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PDFKit
+class MyPDFKit
   class Configuration
     attr_accessor :meta_tag_prefix, :root_url
     attr_writer :use_xvfb, :verbose
@@ -69,11 +69,11 @@ class PDFKit
     attr_accessor :configuration
   end
 
-  # Configure PDFKit someplace sensible,
-  # like config/initializers/pdfkit.rb
+  # Configure MyPDFKit someplace sensible,
+  # like config/initializers/my_pdfkit.rb
   #
   # @example
-  #   PDFKit.configure do |config|
+  #   MyPDFKit.configure do |config|
   #     config.wkhtmltopdf = '/usr/bin/wkhtmltopdf'
   #     config.use_xvfb    = true
   #     config.verbose     = true

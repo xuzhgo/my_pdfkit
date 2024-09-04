@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PDFKit
+class MyPDFKit
   module HTMLPreprocessor
 
     # Change relative paths to absolute, and relative protocols to absolute protocols

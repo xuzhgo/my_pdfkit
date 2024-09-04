@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-describe PDFKit::HTMLPreprocessor do
+describe MyPDFKit::HTMLPreprocessor do
   describe "#process" do
-    let(:preprocessor) { PDFKit::HTMLPreprocessor }
+    let(:preprocessor) { MyPDFKit::HTMLPreprocessor }
     let(:root_url) { 'http://example.com/' }  # This mirrors Middleware#root_url's response
     let(:protocol) { 'http' }
 

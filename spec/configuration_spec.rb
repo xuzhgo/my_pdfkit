@@ -2,8 +2,8 @@
 
 require 'spec_helper'
 
-describe PDFKit::Configuration do
-  subject { PDFKit::Configuration.new }
+describe MyPDFKit::Configuration do
+  subject { MyPDFKit::Configuration.new }
   describe "#wkhtmltopdf" do
     context "when explicitly configured" do
       it "uses configured value and don't detect" do

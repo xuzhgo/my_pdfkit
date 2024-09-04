@@ -3,7 +3,7 @@
 require 'tempfile'
 require 'uri'
 
-class PDFKit
+class MyPDFKit
   class Source
     SOURCE_FROM_STDIN = '-'
 

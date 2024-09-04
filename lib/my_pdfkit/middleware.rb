@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PDFKit
+class MyPDFKit
   class Middleware
     def initialize(app, options = {}, conditions = {})
       @app        = app
@@ -31,16 +31,16 @@ class PDFKit
           protocol = protocol(env)
           options = @options.merge(root_url: root_url, protocol: protocol)
 
-          if headers['PDFKit-javascript-delay']
-            options.merge!(javascript_delay: headers.delete('PDFKit-javascript-delay').to_i)
+          if headers['MyPDFKit-javascript-delay']
+            options.merge!(javascript_delay: headers.delete('MyPDFKit-javascript-delay').to_i)
           end
 
-          body = PDFKit.new(body, options).to_pdf
+          body = MyPDFKit.new(body, options).to_pdf
           response = [body]
 
-          if headers['PDFKit-save-pdf']
-            File.open(headers['PDFKit-save-pdf'], 'wb') { |file| file.write(body) } rescue nil
-            headers.delete('PDFKit-save-pdf')
+          if headers['MyPDFKit-save-pdf']
+            File.open(headers['MyPDFKit-save-pdf'], 'wb') { |file| file.write(body) } rescue nil
+            headers.delete('MyPDFKit-save-pdf')
           end
 
           unless @caching
@@ -64,7 +64,7 @@ class PDFKit
     private
 
     def root_url(env)
-      PDFKit.configuration.root_url || "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/"
+      MyPDFKit.configuration.root_url || "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/"
     end
 
     def protocol(env)
@@ -101,7 +101,7 @@ class PDFKit
       %w[PATH_INFO REQUEST_URI].each { |e| env[e] = path }
 
       env['HTTP_ACCEPT'] = concat(env['HTTP_ACCEPT'], Rack::Mime.mime_type('.html'))
-      env['Rack-Middleware-PDFKit'] = 'true'
+      env['Rack-Middleware-MyPDFKit'] = 'true'
     end
 
     def concat(accepts, type)

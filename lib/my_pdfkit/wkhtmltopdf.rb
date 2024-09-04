@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PDFKit
+class MyPDFKit
   class WkHTMLtoPDF
     attr_reader :options
     # Pulled from: 

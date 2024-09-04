@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class PDFKit
+class MyPDFKit
   VERSION = '0.8.7.3'
 end

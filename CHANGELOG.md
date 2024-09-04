@@ -28,7 +28,7 @@
 2021-01-23
 =================
   * Bump to 0.8.5
-  * Make `PDFKit::VERSION` public (#484) 
+  * Make `MyPDFKit::VERSION` public (#484) 
   * Fix to render stylesheets as html safe string on Rails 6 (#483)
       * Adds support for Rails 6
 
@@ -70,7 +70,7 @@
 2015-08-26
 =================
   * Bump to 0.8.2
-  * Fix URI errors for users using PDFKit in contexts with 'uri' not
+  * Fix URI errors for users using MyPDFKit in contexts with 'uri' not
     already required (thanks christhekeele)
 
 2015-08-20
@@ -91,8 +91,8 @@
 2015-05-06
 =================
   * Bump to 0.7.0
-  * Fix issue #230 where PDFKit called `bundle exec` without a Gemfile
-  * Fix issue #183 where PDFKit broke the path to wkhtmltopdf.exe by escaping
+  * Fix issue #230 where MyPDFKit called `bundle exec` without a Gemfile
+  * Fix issue #183 where MyPDFKit broke the path to wkhtmltopdf.exe by escaping
     spaces in paths
   * Improve performance by not storing the PDF in memory if a path is
     provided. Thanks @mikefarah
@@ -113,7 +113,7 @@
     options
   * Fix status code 2 being treated as failure
   * Escape `\X` in styesheets
-  * Allow controllers to set PDFKit-save-pdf
+  * Allow controllers to set MyPDFKit-save-pdf
   * Fix Middleware not respecting subdomains in path
 
 2013-06-12
